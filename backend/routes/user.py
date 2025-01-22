@@ -13,6 +13,11 @@ def init_app(db):
     global user_collection
     user_collection = db['user']
 
+async def check_user_exist(user):
+    uid = user["uid"]
+    find = await user_collection.find_one({"uid": uid})
+    if not find:
+        raise USER_NOT_EXISTS
 
 router = APIRouter()
 
@@ -27,11 +32,9 @@ async def get_data(data=UserDepend):
 
 @router.post('/update')
 async def update(new_data: UserUpdate, data=UserDepend):
-    uid = data['uid']
-    find = await user_collection.find_one({"uid": uid})
-    if not find:
-        raise USER_NOT_EXISTS
     
+    check_user_exist(data)
+    uid = data["uid"]
     update_data = {k: v for k, v in new_data.model_dump().items() if v is not None}
 
     await user_collection.update_one(

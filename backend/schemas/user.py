@@ -33,4 +33,14 @@ class UserUpdate(BaseModel):
 
 }
 
+{
+    "name": "weiso",
+    "password": "12345678",
+    "email": "weiso@example.com",
+    "sex": 0,
+    "age": 20,
+    "identity": 3
+
+}
+
 """
