@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class UserBase(BaseModel):
@@ -16,6 +16,12 @@ class UserCreate(UserBase):
 class User(UserBase):
     uid: str
 
+class UserUpdate(BaseModel):
+    name: Optional[str] = Field(None, max_length=50)
+    password: Optional[str] = None
+    email: Optional[str] = None
+    sex: Optional[bool] = Field(None, description="True is women, false is men")
+    age: Optional[int] = None
 """
 {
     "name": "teddy",
