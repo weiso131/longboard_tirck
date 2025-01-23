@@ -19,11 +19,19 @@ USER_ALREADY_EXISTS = HTTPException(
     detail="The account is already exist"
 )
 
-STUDENT_NOT_ALLOW_EDIT_TRICK = HTTPException(
-    status_code=400,
-    detail="Student not allow to edit /trick"
-)
 WRONG_EMAIL_OR_PASSWORD = HTTPException(
     status_code=400,
     detail="wrong email or password"
+)
+TOKEN_EXPIRED = HTTPException(
+    status_code=400, 
+    detail="token expired"
+)
+TOKEN_INVALID = HTTPException(
+    status_code=400, 
+    detail="token invalid"
+)
+INSUFFICIENT_PERMISSIONS = HTTPException(
+    status_code=400, 
+    detail="insufficient permissions"
 )

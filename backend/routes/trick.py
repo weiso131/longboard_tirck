@@ -24,10 +24,8 @@ router = APIRouter()
 
 
 @router.post("/add_trick")
-async def add_trick(trick: Trick, teacher=UserDepend):
+async def add_trick(trick: Trick, teacher=TeacherDepend):
     check_user_exist(teacher)
-    if teacher['identity'] == 1:
-        raise STUDENT_NOT_ALLOW_EDIT_TRICK
 
     trick_dict = trick.model_dump()
     if await trick_collection.find_one({"name": trick_dict["name"]}):
@@ -42,10 +40,8 @@ async def trick_list():
     return all_trick
 
 @router.put("/update")
-async def trick_update(trick_update_data: TrickUpdate, teacher=UserDepend):
+async def trick_update(trick_update_data: TrickUpdate, teacher=TeacherDepend):
     check_user_exist(teacher)
-    if teacher['identity'] == 1:
-        raise STUDENT_NOT_ALLOW_EDIT_TRICK
     
     data_dict = trick_update_data.model_dump()
     data_dict["name"] = data_dict["new_name"]
