@@ -1,29 +1,14 @@
 
 from bson import ObjectId
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from schemas.trick import Trick, TrickUpdate, StudentTrick
+from schemas.trick import Trick, TrickUpdate
 from .utils.jwt import *
 from .user import check_user_exist
 
-TRICK_ALREADY_EXIST = HTTPException(
-    status_code=400, 
-    detail="Trick already exist"
-)
+from exception import *
 
-TRICK_NOT_EXIST = HTTPException(
-    status_code=400, 
-    detail="Trick not exist"
-)
-USER_NOT_EXISTS = HTTPException(
-    status_code=400,
-    detail="The account isn't exist"
-)
-STUDENT_NOT_ALLOW_EDIT_TRICK = HTTPException(
-    status_code=400,
-    detail="Student not allow to edit /trick"
-)
 
 user_collection = None
 trick_collection = None

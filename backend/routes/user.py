@@ -1,13 +1,10 @@
 from fastapi import APIRouter
 from .utils.jwt import *
 from schemas.user import UserUpdate
+from exception import *
 
 user_collection = None
 
-USER_NOT_EXISTS = HTTPException(
-    status_code=400,
-    detail="The account isn't exist"
-)
 
 def init_app(db):
     global user_collection

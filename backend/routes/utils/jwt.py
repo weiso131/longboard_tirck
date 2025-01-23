@@ -1,6 +1,7 @@
 import jwt
 import datetime
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from config import settings
 
 # 秘鑰和加密算法
@@ -14,6 +15,10 @@ REFRESH_TOKEN_EXPIRES_IN = 7 * 24 * 60  # 7 天
 TOKEN_EXPIRED = HTTPException(status_code=400, detail="token expired")
 TOKEN_INVALID = HTTPException(status_code=400, detail="token invalid")
 
+SECURITY = HTTPBearer(
+    scheme_name="JWT",
+    description="JWT which get from posting discord oauth code to /auth/login."
+)
 
 
 
@@ -33,7 +38,7 @@ def generate_tokens(payload):
 
 
 # 3. 驗證 JWT
-def verify_jwt(token):
+def verify_jwt(token: HTTPAuthorizationCredentials = Security(SECURITY)):
     """
     驗證 JWT Token
     :param token: str, JWT Token
