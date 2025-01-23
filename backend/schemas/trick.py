@@ -14,6 +14,10 @@ class TrickUpdate(Trick):
     tips: Optional[str] = Field(None, description="The text description of the trick tips")
 
 class StudentTrick(BaseModel):
-    trick_name: str = Field(..., description="Name of the trick")
+    name: str = Field(..., description="Name of the trick")
     proficiency: int = Field(..., description="Number from 0 to 100, student can't change this, only by his/her teacher")
     remark: Optional[str] = Field(None, description="Teacher can leaves some remark here")
+
+class StudentTrickUpdate(StudentTrick):
+    new_name: Optional[str] = Field(None, description="Name of the trick")
+    proficiency: Optional[int] = Field(None, description="Number from 0 to 100, student can't change this, only by his/her teacher")

@@ -17,7 +17,7 @@ REFRESH_TOKEN_EXPIRES_IN = 7 * 24 * 60  # 7 天
 
 SECURITY = HTTPBearer(
     scheme_name="JWT",
-    description="JWT which get from posting discord oauth code to /auth/login."
+    description="JWT which get from /auth/login."
 )
 
 
