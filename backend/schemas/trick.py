@@ -1,23 +1,36 @@
 from typing import Optional
 from pydantic import BaseModel, Field
+from beanie import Document
 
-class Trick(BaseModel):
+
+
+class TrickBase(BaseModel):
     name: str = Field(..., description="Name of the trick")
     difficulty: int = Field(..., description="Difficulty can be the humber from 1 to 10")
     video_link: Optional[str] = Field(None, description="The tutuiral video of the trick")
     tips: Optional[str] = Field(None, description="The text description of the trick tips")
 
-class TrickUpdate(Trick):
+class Trick(TrickBase, Document):
+    pass
+
+class TrickUpdate(TrickBase):
     new_name: Optional[str] = Field(..., description="Name of the trick")
     difficulty: Optional[int] = Field(None, description="Difficulty can be the humber from 1 to 10")
     video_link: Optional[str] = Field(None, description="The tutuiral video of the trick")
     tips: Optional[str] = Field(None, description="The text description of the trick tips")
 
-class StudentTrick(BaseModel):
+class StudentTrickBase(BaseModel):
     name: str = Field(..., description="Name of the trick")
     proficiency: int = Field(..., description="Number from 0 to 100, student can't change this, only by his/her teacher")
     remark: Optional[str] = Field(None, description="Teacher can leaves some remark here")
 
-class StudentTrickUpdate(StudentTrick):
+class StudentTrickCreate(StudentTrickBase):
+    pass
+
+class StudentTrick(StudentTrickBase, Document):
+    uid: str
+
+
+class StudentTrickUpdate(StudentTrickBase):
     new_name: Optional[str] = Field(None, description="Name of the trick")
     proficiency: Optional[int] = Field(None, description="Number from 0 to 100, student can't change this, only by his/her teacher")

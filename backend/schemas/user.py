@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field
+from beanie import Document, Indexed
 
 class UserBase(BaseModel):
     name: str = Field(..., max_length=50)
@@ -13,7 +14,7 @@ class UserCreate(UserBase):
     pass
 
 
-class User(UserBase):
+class User(UserBase, Document):
     uid: str
 
 class UserUpdate(BaseModel):
@@ -22,25 +23,3 @@ class UserUpdate(BaseModel):
     email: Optional[str] = None
     sex: Optional[bool] = Field(None, description="True is women, false is men")
     age: Optional[int] = None
-"""
-{
-    "name": "teddy",
-    "password": "12345678",
-    "email": "teddy@example.com",
-    "sex": 0,
-    "age": 20,
-    "identity": 1
-
-}
-
-{
-    "name": "weiso",
-    "password": "12345678",
-    "email": "weiso@example.com",
-    "sex": 0,
-    "age": 20,
-    "identity": 3
-
-}
-
-"""

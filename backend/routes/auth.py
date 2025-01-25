@@ -5,15 +5,9 @@ import uuid
 
 import bcrypt
 
-from schemas.user import UserCreate
+from schemas.user import UserCreate, User
 
 from exception import *
-
-user_collection = None
-
-def init_app(db):
-    global user_collection
-    user_collection = db['user']
 
 router = APIRouter()
 
@@ -21,7 +15,8 @@ router = APIRouter()
 async def register(data: UserCreate):
     hashpw = bcrypt.hashpw(data.password.encode(), bcrypt.gensalt())
     uid = uuid.uuid4()
-    find = await user_collection.find_one({"email": data.email})
+
+    find = await User.find_one(User.email == data.email)
     if find:
         return USER_ALREADY_EXISTS
 
@@ -36,20 +31,23 @@ async def register(data: UserCreate):
     }
     jwt_token = generate_tokens(user)
 
-    await user_collection.insert_one(user)
+    await User.insert_one(User(**user))
 
     return jwt_token
 
 @router.get('/login')
 async def login(email: str, password: str):
-    user = await user_collection.find_one({"email": email})
+    user = await User.find_one(User.email == email)
     if not user:
         return WRONG_EMAIL_OR_PASSWORD
-    if not bcrypt.checkpw(password.encode(), user["password"].encode("utf-8")):
+    if not bcrypt.checkpw(password.encode(), user.password.encode("utf-8")):
         return WRONG_EMAIL_OR_PASSWORD
     
-    user.pop("_id", None)
-    return generate_tokens(user)
+    user_dict = user.model_dump()
+    user_dict.pop("id", None)
+
+
+    return generate_tokens(user_dict)
 
 
 

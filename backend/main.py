@@ -1,19 +1,23 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from routes import auth, user, trick, teacher
-from motor.motor_asyncio import AsyncIOMotorClient
-from config import settings
-from routes import init_app
 
-dc_name = settings.dc_name
-uri = settings.uri
-tlsCAFileName = "mongodb-bundle.pem"
-client = AsyncIOMotorClient(uri, tlsCAFile=tlsCAFileName)
-db = client[dc_name]
+from database.database import init_database
 
-init_app(db)
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("初始化資料庫")
+    await init_database()
+    yield
+    print("關閉應用")
+    
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/user")
 app.include_router(trick.router, prefix="/trick")
 app.include_router(teacher.router, prefix="/teacher")
+
