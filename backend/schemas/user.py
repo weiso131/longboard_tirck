@@ -13,9 +13,11 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     pass
 
-
-class User(UserBase, Document):
+class UserWithUid(UserBase):
     uid: str
+
+class User(UserWithUid, Document):
+    pass
 
 class UserUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=50)
